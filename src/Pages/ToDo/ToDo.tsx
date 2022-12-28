@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import InputField from "./InputField";
-import TodoFooter from "./ToDoFooter";
-import ToDoList from "./ToDoList";
-import { ToDo } from "../models/models";
+import InputField from "./components/ToDoForm/ToDoForm";
+import TodoFooter from "./components/ToDoFooter/ToDoFooter";
+import ToDoList from "./components/ToDoList/ToDoList";
+import { ToDo } from "./types";
+import styles from "./styles";
 
 const Todo: React.FC = () => {
   const [todos, setToDos] = useState<Array<ToDo>>([]);
@@ -24,8 +25,10 @@ const Todo: React.FC = () => {
   };
 
   return (
-    <div className="main">
-      <h1 style={{ color: "#484646" }}>TO DO APP</h1>
+    <div style={styles.main}>
+      <h1 style={{ color: "#484646", textAlign: "center", margin: "15px" }}>
+        TO DO APP
+      </h1>
       <InputField addTodo={addTodo} />
       <ToDoList todos={todos} setToDos={setToDos} />
       <TodoFooter todos={todos} setToDos={setToDos} />

@@ -1,6 +1,7 @@
 import React from "react";
-import { ToDo } from "../models/models";
-import SingleToDo from "./SingleToDo";
+import { ToDo } from "../../types";
+import SingleToDo from "../SingleToDo/SingleToDo";
+import styles from "./styles";
 
 interface Props {
   todos: ToDo[];
@@ -25,15 +26,15 @@ const ToDoList: React.FC<Props> = ({ todos, setToDos }) => {
   };
 
   return (
-    <div className="list">
+    <div style={styles.list}>
       {todos.map((todo) => {
         return (
           <SingleToDo
             key={todo.id}
             todo={todo}
-            completeTodo={completeTodo}
-            deleteTodo={deleteTodo}
-            editTodo={editTodo}
+            onCompleteTodo={completeTodo}
+            onDeleteTodo={deleteTodo}
+            onEditTodo={editTodo}
           />
         );
       })}

@@ -1,7 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import TextField from "@mui/material/TextField";
-import { ToDo, Input } from "../models/models";
+import { ToDo, Input } from "../../types";
+import styles from "./styles";
 
 interface Props {
   addTodo: (todo: ToDo) => void;
@@ -24,7 +25,7 @@ const InputField: React.FC<Props> = ({ addTodo }) => {
     }
   };
   return (
-    <form className="input">
+    <form style={styles.input}>
       <div>
         <TextField
           required
@@ -44,7 +45,7 @@ const InputField: React.FC<Props> = ({ addTodo }) => {
           value={inputs?.assignee}
           onChange={(e) => setinputs({ ...inputs, assignee: e.target.value })}
         />
-        <button type="submit" onClick={handleAddToDo}>
+        <button style={styles.button} type="submit" onClick={handleAddToDo}>
           Add
         </button>
       </div>

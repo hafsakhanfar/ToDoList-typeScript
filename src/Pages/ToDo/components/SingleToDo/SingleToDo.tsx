@@ -1,22 +1,23 @@
 import React, { useState } from "react";
-import Modal from "../Modal";
-import { ToDo, Input } from "../models/models";
+import Modal from "../../../../components/Modal/Modal";
+import { ToDo, Input } from "../../types";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DoneIcon from "@mui/icons-material/Done";
 import EditIcon from "@mui/icons-material/Edit";
 import TextField from "@mui/material/TextField";
+import styles from "./styles";
 
 interface todo {
   todo: ToDo;
-  deleteTodo: (id: string) => void;
-  completeTodo: (id: string) => void;
-  editTodo: (id: string, newTodo: ToDo) => void;
+  onDeleteTodo: (id: string) => void;
+  onCompleteTodo: (id: string) => void;
+  onEditTodo: (id: string, newTodo: ToDo) => void;
 }
 const SingleToDo: React.FC<todo> = ({
   todo,
-  deleteTodo,
-  completeTodo,
-  editTodo,
+  onDeleteTodo,
+  onCompleteTodo,
+  onEditTodo,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [toggleEdit, setToggleEdit] = useState(false);
@@ -26,14 +27,14 @@ const SingleToDo: React.FC<todo> = ({
   });
 
   const handelDoneClick = () => {
-    completeTodo(todo.id);
+    onCompleteTodo(todo.id);
   };
 
   const handelDeleteclick = () => {
-    deleteTodo(todo.id);
+    onDeleteTodo(todo.id);
   };
   const handelEditclick = () => {
-    editTodo(todo.id, {
+    onEditTodo(todo.id, {
       ...todo,
       task: inputs.task,
       assignee: inputs.assignee,
@@ -45,9 +46,9 @@ const SingleToDo: React.FC<todo> = ({
   };
 
   return (
-    <div className="toDo">
+    <div style={styles.toDo}>
       {toggleEdit ? (
-        <div className="task">
+        <div style={styles.task}>
           <TextField
             id="standard-basic"
             variant="standard"
@@ -62,13 +63,17 @@ const SingleToDo: React.FC<todo> = ({
           />
         </div>
       ) : (
-        <div className={todo.isDone ? "task completed" : "task"}>
+        <div
+          style={
+            todo.isDone ? { ...styles.task, ...styles.completed } : styles.task
+          }
+        >
           <p>{todo.task} </p>
           <p>{todo.assignee} </p>
         </div>
       )}
 
-      <div className="task">
+      <div style={styles.task}>
         <EditIcon
           fontSize="small"
           onClick={() => {
@@ -81,12 +86,15 @@ const SingleToDo: React.FC<todo> = ({
 
       {showModal ? (
         <Modal>
-          <h3>Are you sure Delete this Task</h3>
-          <div className="modalButton">
-            <button className="button" onClick={toggleShowModal}>
+          <h3>Are you sure you want to delete this Task</h3>
+          <div>
+            <button style={styles.button} onClick={toggleShowModal}>
               CANCEL
             </button>
-            <button className="deleteButton" onClick={handelDeleteclick}>
+            <button
+              style={{ ...styles.button, ...styles.deleteButton }}
+              onClick={handelDeleteclick}
+            >
               DELETE
             </button>
           </div>

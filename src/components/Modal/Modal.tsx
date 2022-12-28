@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import * as React from "react";
+import styles from "./styles";
 
 type ModalProps = {
   children?: React.ReactNode;
@@ -16,7 +17,7 @@ const Modal: React.FC<ModalProps> = ({ children }) => {
   }, []);
 
   return createPortal(
-    <div className="modal">{children}</div>,
+    <div style={styles.modal}>{children}</div>,
     elementRef.current
   );
 };
