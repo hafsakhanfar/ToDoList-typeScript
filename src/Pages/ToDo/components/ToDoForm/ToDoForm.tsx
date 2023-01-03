@@ -1,27 +1,22 @@
 import React from "react";
 import { useState } from "react";
 import TextField from "@mui/material/TextField";
-import { ToDo, Input } from "../../types";
+import { ToDo } from "../../types";
 import styles from "./styles";
 
-interface Props {
+interface InputFieldProps {
   addTodo: (todo: ToDo) => void;
 }
 
-const InputField: React.FC<Props> = ({ addTodo }) => {
-  const [inputs, setinputs] = useState<Input>({ task: "", assignee: "" });
+const initialFormState: ToDo = { id: "", task: "", assignee: "", isDone: false };
+
+const InputField: React.FC<InputFieldProps> = ({ addTodo }) => {
+  const [newToDo, setNewToDo] = useState<ToDo>(initialFormState);
+
   const handleAddToDo = (): void => {
-    if (inputs.task && inputs.assignee) {
-      const ToDo: ToDo = {
-        id: new Date().getTime().toString(),
-        task: inputs.task,
-        assignee: inputs.assignee,
-        isDone: false,
-      };
-      addTodo(ToDo);
-      setinputs({ task: "", assignee: "" });
-    } else {
-      console.log("please enter some text ");
+    if (newToDo.task && newToDo.assignee) {
+      addTodo({ ...newToDo, id: new Date().getTime().toString() });
+      setNewToDo(initialFormState);
     }
   };
   return (
@@ -32,8 +27,8 @@ const InputField: React.FC<Props> = ({ addTodo }) => {
           id="outlined-basic"
           label="Task"
           variant="outlined"
-          value={inputs?.task}
-          onChange={(e) => setinputs({ ...inputs, task: e.target.value })}
+          value={newToDo?.task}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewToDo(prevValue => ({ ...prevValue, task: e.target.value }))}
         />
       </div>
       <div>
@@ -42,8 +37,8 @@ const InputField: React.FC<Props> = ({ addTodo }) => {
           id="outlined-basic"
           label="Assignee"
           variant="outlined"
-          value={inputs?.assignee}
-          onChange={(e) => setinputs({ ...inputs, assignee: e.target.value })}
+          value={newToDo?.assignee}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewToDo(prevValue => ({ ...prevValue, assignee: e.target.value }))}
         />
         <button style={styles.button} type="submit" onClick={handleAddToDo}>
           Add

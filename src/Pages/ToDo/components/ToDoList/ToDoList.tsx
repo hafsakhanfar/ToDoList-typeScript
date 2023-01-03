@@ -3,11 +3,11 @@ import { ToDo } from "../../types";
 import SingleToDo from "../SingleToDo/SingleToDo";
 import styles from "./styles";
 
-interface Props {
+interface ToDoListProps {
   todos: ToDo[];
-  setToDos: React.Dispatch<React.SetStateAction<ToDo[]>>;
+  setToDos: (todos: ToDo[]) => void;
 }
-const ToDoList: React.FC<Props> = ({ todos, setToDos }) => {
+const ToDoList: React.FC<ToDoListProps> = ({ todos, setToDos }) => {
   const completeTodo = (id: string): void => {
     const mapped = todos.map((todo) =>
       todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
@@ -20,8 +20,8 @@ const ToDoList: React.FC<Props> = ({ todos, setToDos }) => {
     setToDos(deleted);
   };
 
-  const editTodo = (id: string, newTodo: ToDo): void => {
-    const updatedTodos = todos.map((todo) => (todo.id === id ? newTodo : todo));
+  const editTodo = (newTodo: ToDo): void => {
+    const updatedTodos = todos.map((todo) => (todo.id === newTodo.id ? newTodo : todo));
     setToDos(updatedTodos);
   };
 
