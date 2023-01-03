@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Modal from "../../../../components/Modal/Modal";
-import { ToDo, Input } from "../../types";
+import { ToDo } from "../../types";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DoneIcon from "@mui/icons-material/Done";
 import EditIcon from "@mui/icons-material/Edit";
@@ -11,7 +11,7 @@ interface todo {
   todo: ToDo;
   onDeleteTodo: (id: string) => void;
   onCompleteTodo: (id: string) => void;
-  onEditTodo: (id: string, newTodo: ToDo) => void;
+  onEditTodo: (newTodo: ToDo) => void;
 }
 const SingleToDo: React.FC<todo> = ({
   todo,
@@ -21,10 +21,7 @@ const SingleToDo: React.FC<todo> = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [toggleEdit, setToggleEdit] = useState(false);
-  const [inputs, setinputs] = useState<Input>({
-    task: todo.task,
-    assignee: todo.assignee,
-  });
+  const [toDoItem, setToDoItem] = useState<ToDo>(todo);
 
   const handelDoneClick = () => {
     onCompleteTodo(todo.id);
@@ -33,14 +30,14 @@ const SingleToDo: React.FC<todo> = ({
   const handelDeleteclick = () => {
     onDeleteTodo(todo.id);
   };
-  const handelEditclick = () => {
-    onEditTodo(todo.id, {
-      ...todo,
-      task: inputs.task,
-      assignee: inputs.assignee,
-    });
+
+  const handleEditClick = () => {
+    if (toggleEdit) {
+      onEditTodo(toDoItem);
+    }
     setToggleEdit(!toggleEdit);
-  };
+  }
+
   const toggleShowModal = () => {
     setShowModal(!showModal);
   };
@@ -52,21 +49,22 @@ const SingleToDo: React.FC<todo> = ({
           <TextField
             id="standard-basic"
             variant="standard"
-            value={inputs?.task || ""}
-            onChange={(e) => setinputs({ ...inputs, task: e.target.value })}
+            value={toDoItem?.task || ""}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setToDoItem(prevValue => ({ ...prevValue, task: e.target.value }))}
           />
           <TextField
             id="standard-basic"
             variant="standard"
-            value={inputs?.assignee || ""}
-            onChange={(e) => setinputs({ ...inputs, assignee: e.target.value })}
+            value={toDoItem?.assignee || ""}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setToDoItem(prevValue => ({ ...prevValue, assignee: e.target.value }))}
           />
         </div>
       ) : (
         <div
-          style={
-            todo.isDone ? { ...styles.task, ...styles.completed } : styles.task
-          }
+          style={{
+            ...styles.task,
+            ...(todo.isDone ? styles.completed : {})
+          }}
         >
           <p>{todo.task} </p>
           <p>{todo.assignee} </p>
@@ -76,15 +74,13 @@ const SingleToDo: React.FC<todo> = ({
       <div style={styles.task}>
         <EditIcon
           fontSize="small"
-          onClick={() => {
-            toggleEdit ? handelEditclick() : setToggleEdit(!toggleEdit);
-          }}
+          onClick={handleEditClick}
         />
         <DoneIcon fontSize="small" onClick={handelDoneClick} />
         <DeleteIcon fontSize="small" onClick={toggleShowModal} />
       </div>
 
-      {showModal ? (
+      {showModal && (
         <Modal>
           <h3>Are you sure you want to delete this Task</h3>
           <div>
@@ -99,7 +95,7 @@ const SingleToDo: React.FC<todo> = ({
             </button>
           </div>
         </Modal>
-      ) : null}
+      )}
     </div>
   );
 };

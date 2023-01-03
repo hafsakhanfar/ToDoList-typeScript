@@ -3,16 +3,21 @@ import { ToDo } from "../../types";
 import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
 import styles from "./styles";
 import Modal from "../../../../components/Modal";
-interface Props {
+interface TodoFooterProps {
   todos: ToDo[];
-  setToDos: React.Dispatch<React.SetStateAction<ToDo[]>>;
+  setToDos: (todos: ToDo[]) => void;
 }
 
-const TodoFooter: React.FC<Props> = ({ todos, setToDos }) => {
+const TodoFooter: React.FC<TodoFooterProps> = ({ todos, setToDos }) => {
   const [showModal, setShowModal] = useState(false);
   const toggleShowModal = () => {
     setShowModal(!showModal);
   };
+
+  const handleDeleteAllTodos = () => {
+    setToDos([]);
+    toggleShowModal();
+  }
 
   return (
     <div style={styles.footer}>
@@ -28,9 +33,7 @@ const TodoFooter: React.FC<Props> = ({ todos, setToDos }) => {
             </button>
             <button
               style={{ ...styles.button, ...styles.deleteButton }}
-              onClick={() => {
-                setToDos([]);
-              }}
+              onClick={handleDeleteAllTodos}
             >
               DELETE
             </button>

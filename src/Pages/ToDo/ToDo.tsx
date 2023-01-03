@@ -15,13 +15,13 @@ const Todo: React.FC = () => {
     setToDos(localTodos);
   }, []);
 
-  useEffect(() => {
+  const handleChangeToDos = (todos: ToDo[]) => {
+    setToDos(todos);
     localStorage.setItem("localTasks", JSON.stringify(todos));
-  }, [todos]);
+  }
 
   const addTodo = (todo: ToDo): void => {
-    localStorage.setItem("localTasks", JSON.stringify([...todos, todo]));
-    setToDos([...todos, todo]);
+    handleChangeToDos([...todos, todo]);
   };
 
   return (
@@ -30,8 +30,8 @@ const Todo: React.FC = () => {
         TO DO APP
       </h1>
       <InputField addTodo={addTodo} />
-      <ToDoList todos={todos} setToDos={setToDos} />
-      <TodoFooter todos={todos} setToDos={setToDos} />
+      <ToDoList todos={todos} setToDos={handleChangeToDos} />
+      <TodoFooter todos={todos} setToDos={handleChangeToDos} />
     </div>
   );
 };

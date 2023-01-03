@@ -4,8 +4,3 @@ export interface ToDo {
   assignee: string;
   isDone: boolean;
 }
-
-export interface Input {
-  task: string;
-  assignee: string;
-}
